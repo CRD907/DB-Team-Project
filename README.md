@@ -3,7 +3,7 @@
 To get started, fork this repo into a directory of your choice. Then, cd to that directory and do the following:
 ```
 $ python3 -m venv venv
-(venv)$ source venv/bin/active [on a Mac; differs on Windows]
+(venv)$ source venv/Scripts/activate [Windows]
 (venv)$ pip install -r requirements.txt
 (venv)$ python manage.py runserver
 ```
