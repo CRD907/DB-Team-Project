@@ -2,14 +2,13 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import AbstractUser
+from encyclopedia.models import User
 from django.db import IntegrityError
 from django.http import  HttpResponseRedirect
 import markdown
 import random
 from . import util
 
-class User(AbstractUser):
-    pass
 
 def convert_to_html(page_title):
     page = util.get_entry(page_title)
