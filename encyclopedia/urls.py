@@ -9,5 +9,8 @@ urlpatterns = [
     path("search", views.search, name="search"),
     path("get_random/", views.get_random, name="get_random"),
     path("edit_page/<str:title>", views.edit_page, name="edit_page"),
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    path("register/", views.register, name="register"),
     #path("save_page/", views.save_page, name="save_page")
 ]

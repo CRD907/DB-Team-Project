@@ -9,30 +9,32 @@
         <link href="{% static 'encyclopedia/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <div class="row">
-            <div class="sidebar col-lg-2 col-md-3">
-                <h2>Wiki</h2>
-                <form action="{%url 'search' %}" method="POST">
-                    {% csrf_token %}
-                    <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
-                </form>
-                <div>
+        <header>
+            <h1>Welcome</h1>
+            <nav>
+                <span>
+                    <form action="{%url 'search' %}" method="POST">
+                        {% csrf_token %}
+                        <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
+                    </form>
                     <a href="{% url 'index' %}">Home</a>
-                </div>
-                <div>
-                    <a href="{% url 'newpage' %}">Create New Page</a>
-                </div>
-                <div>
                     <a href="{% url 'get_random' %}">Random Page</a>
-                </div>
-                {% block nav %}
-                {% endblock %}
-            </div>
-            <div class="main col-lg-10 col-md-9">
-                {% block body %}
-                {% endblock %}
-            </div>
-        </div>
-
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'newpage' %}">Create New Page</a>
+                </span>
+                <span>
+                        Welcome <strong>{{ user.username }}!</strong>
+                        <a href="{% url 'logout' %}">Log Out</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Log In</a>
+                        <a href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </span>
+            </nav>
+        </header>
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
     </body>
 </html>
