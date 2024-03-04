@@ -94,7 +94,55 @@ def edit_page(request, title):
             "title": title,
             "content": content
         })
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
 
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("welcome", kwargs={'username': username}))
+        else:
+            return render(request, "encyclopedia/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "encyclopedia/login.html")
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+
+        if password != confirmation:
+            return render(request, "encyclopedia/register.html", {
+                "message": "Passwords must match."
+            })
+
+        try:
+            user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            user.save()
+        except IntegrityError:
+            return render(request, "encyclopedia/register.html", {
+                "message": "Username already taken."
+            })
+
+        login(request, user)
+        return HttpResponseRedirect(reverse("welcome", kwargs={'username': username}))
+    else:
+        return render(request, "encyclopedia/register.html")  
+
+def welcome(request, username):
+    return render(request, "encyclopedia/welcome.html", {
+        "username": username
+    })
 # def save_page(request):
 #     if request.method =="POST":
 #         title = request.POST['title']
@@ -104,6 +152,7 @@ def edit_page(request, title):
 #         "title": title,
 #         "content": body
 #     })
+'''
 def login_view(request):
     if request.method == "POST":
 
@@ -154,3 +203,5 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "encyclopedia/register.html")    
+'''
+    
