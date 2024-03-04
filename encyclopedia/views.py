@@ -96,15 +96,6 @@ def edit_page(request, title):
             "content": content
         })
 
-# def save_page(request):
-#     if request.method =="POST":
-#         title = request.POST['title']
-#         body = request.POST['content']
-#         util.save_entry(title, body)
-#         return render(request, "encyclopedia/entry.html", {
-#         "title": title,
-#         "content": body
-#     })
 def login_view(request):
     if request.method == "POST":
         cursor = connection.cursor()
@@ -121,9 +112,7 @@ def login_view(request):
         if user is not None:
             return render(request, "encyclopedia/index.html", {'username': user[3]})
         else:
-            return render(request, "encyclopedia/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            return render(request, "encyclopedia/login.html", {"message": "Invalid username and/or password."})
     else:
         return render(request, "encyclopedia/login.html")
 
@@ -138,7 +127,6 @@ def register(request):
         username = request.POST["username"]
         email = request.POST["email"]
 
-        # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
@@ -146,7 +134,7 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
+        #Create new user
         try:
             user = User(username = username, email = email, password = password)
             user.save()
@@ -155,5 +143,9 @@ def register(request):
                 "message": "Username already taken."
             })
         return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "encyclopedia/register.html")    
+        return render(request, "encyclopedia/register.html") 
+
+def welcome(request, username):
+    return render(request, "encyclopedia/welcome.html", {
+        "username": username
+    })  

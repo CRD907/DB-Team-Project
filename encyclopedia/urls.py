@@ -12,5 +12,6 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("register/", views.register, name="register"),
+    path("welcome/<str:username>", views.welcome, name="welcome"),
     #path("save_page/", views.save_page, name="save_page")
 ]
