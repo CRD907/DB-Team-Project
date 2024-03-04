@@ -8,6 +8,7 @@ from django.http import  HttpResponseRedirect
 import markdown
 import random
 from . import util
+from django.db import connection
 
 
 def convert_to_html(page_title):
@@ -106,16 +107,19 @@ def edit_page(request, title):
 #     })
 def login_view(request):
     if request.method == "POST":
-
+        cursor = connection.cursor()
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
+        #user = authenticate(request, username=username, password=password)
+        #sql = 'SELECT * FROM encyclopedia_user'
+        cursor.execute('SELECT * FROM encyclopedia_user WHERE username = "' + username + '" AND password = "' + password + '"')
+        user = cursor.fetchone()
+        print(user)
+        #Check if authentication successful
         if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return render(request, "encyclopedia/index.html", {'username': user[3]})
         else:
             return render(request, "encyclopedia/login.html", {
                 "message": "Invalid username and/or password."
@@ -144,13 +148,12 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User(username = username, email = email, password = password)
             user.save()
         except IntegrityError:
             return render(request, "encyclopedia/register.html", {
                 "message": "Username already taken."
             })
-        login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "encyclopedia/register.html")    

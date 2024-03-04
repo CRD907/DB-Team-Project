@@ -19,11 +19,11 @@
                     </form>
                     <a href="{% url 'index' %}">Home</a>
                     <a href="{% url 'get_random' %}">Random Page</a>
-                    {% if user.is_authenticated %}
+                    {% if username %}
                         <a href="{% url 'newpage' %}">Create New Page</a>
                 </span>
                 <span>
-                        Welcome <strong>{{ user.username }}!</strong>
+                        Welcome <strong>{{ username }}!</strong>
                         <a href="{% url 'logout' %}">Log Out</a>
                     {% else %}
                         <a href="{% url 'login' %}">Log In</a>
