@@ -148,13 +148,8 @@ def register(request):
             return render(request, "encyclopedia/register.html", {
                 "message": "Username already taken."
             })
-<<<<<<< HEAD
             
         return render(request, "encyclopedia/index.html", {'username': username})
-=======
-        return HttpResponseRedirect(reverse("index"))
-        return render(request, "encyclopedia/register.html")
->>>>>>> 96b690c8428f2b4f7bccaa0cd3f15a1a71e2b17d
     else:
         return render(request, "encyclopedia/register.html") 
 
