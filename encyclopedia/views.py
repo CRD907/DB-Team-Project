@@ -56,6 +56,7 @@ def search(request):
             })    
 
 def newpage(request):
+    print('hi')
     if request.method == "GET":
         return render(request, "encyclopedia/create_new.html")
     
@@ -103,8 +104,6 @@ def login_view(request):
         username = request.POST["username"]
         password = request.POST["password"]
 
-        #user = authenticate(request, username=username, password=password)
-        #sql = 'SELECT * FROM encyclopedia_user'
         cursor.execute('SELECT * FROM encyclopedia_user WHERE username = "' + username + '" AND password = "' + password + '"')
         user = cursor.fetchone()
         print(user)
@@ -123,6 +122,7 @@ def logout_view(request):
 
 
 def register(request):
+    print(request)
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -136,13 +136,21 @@ def register(request):
 
         #Create new user
         try:
-            user = User(username = username, email = email, password = password)
-            user.save()
+            # user = User(username = username, email = email, password = password)
+            # user.save()
+            cursor = connection.cursor()
+            sql = '''INSERT INTO encyclopedia_user (email, password, username)\n
+                    VALUES ("{}","{}","{}");
+                    '''.format(email, password, username)
+            print(sql)
+            cursor.executescript(sql)
         except IntegrityError:
             return render(request, "encyclopedia/register.html", {
                 "message": "Username already taken."
             })
-        return HttpResponseRedirect(reverse("index"))
+            
+        return render(request, "encyclopedia/index.html", {'username': username})
+    else:
         return render(request, "encyclopedia/register.html") 
 
 def welcome(request, username):
