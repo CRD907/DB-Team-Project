@@ -9,6 +9,8 @@ import markdown
 import random
 from . import util
 from django.db import connection
+from .models import User
+
 
 
 def convert_to_html(page_title):
@@ -156,4 +158,27 @@ def register(request):
 def welcome(request, username):
     return render(request, "encyclopedia/welcome.html", {
         "username": username
-    })  
+    })
+def admin_index(request):
+    data = User.objects.all()
+    return render(request, 'admin/admin_index.html', {'data': data})
+
+def create_data(request):
+    if request.method == 'POST':
+        # Process form data and save to database
+        return redirect('admin_index')
+    else:
+        return render(request, 'admin/create_data.html')
+
+def edit_data(request, id):
+    # Fetch data from database based on id
+    data = User.objects.get(id=id)
+    if request.method == 'POST':
+        # Process form data and update database
+        return redirect('admin_index')
+    else:
+        return render(request, 'admin/edit_data.html', {'data': data})
+
+def delete_data(request, id):
+    # Fetch data from database based on id and delete it
+    return redirect('admin_index')
