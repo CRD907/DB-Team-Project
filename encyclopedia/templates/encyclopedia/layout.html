@@ -13,9 +13,9 @@
             <h1>Welcome</h1>
             <nav>
                 <span>
-                    <form action="{%url 'search' %}" method="POST">
+                    <form action="{%url 'search' %}" method="GET">
                         {% csrf_token %}
-                        <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
+                        <input class="search" type="text" name="q" placeholder="Search For users">
                     </form>
                     <a href="{% url 'index' %}">Home</a>
                     <a href="{% url 'get_random' %}">Random Page</a>

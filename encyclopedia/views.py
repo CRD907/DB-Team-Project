@@ -37,23 +37,24 @@ def entry(request, title):
         })
 
 def search(request):
-    if request.method == "POST":
-        search_query = request.POST['q']
-        body = convert_to_html(search_query)
-        if body is not None:
-            return render(request, "encyclopedia/entry.html", {
-                "title": search_query,
-                "content": body
-            })
-        else :
-            entries = util.list_entries()
-            recommendation = []
-            for entry in entries:
-                if search_query.lower() in entry.lower():
-                    recommendation.append(entry)
-            return render(request, "encyclopedia/search.html", {
-                "recommendation": recommendation
-            })    
+    print(request)
+    if request.method == "GET":
+        search_query = request.GET['q']
+        print(search_query)
+        # if body is not None:
+        #     return render(request, "encyclopedia/entry.html", {
+        #         "title": search_query,
+        #         "content": body
+        #     })
+        # else :
+        #     entries = util.list_entries()
+        #     recommendation = []
+        #     for entry in entries:
+        #         if search_query.lower() in entry.lower():
+        #             recommendation.append(entry)
+        #     return render(request, "encyclopedia/search.html", {
+        #         "recommendation": recommendation
+        #     })    
 
 def newpage(request):
     print('hi')
@@ -103,8 +104,9 @@ def login_view(request):
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
-
-        cursor.execute('SELECT * FROM encyclopedia_user WHERE username = "' + username + '" AND password = "' + password + '"')
+        sql = 'SELECT * FROM encyclopedia_user WHERE username = "' + username + '" AND password = "' + password + '"'
+        print(sql)
+        cursor.execute(sql)
         user = cursor.fetchone()
         print(user)
         #Check if authentication successful
@@ -156,4 +158,4 @@ def register(request):
 def welcome(request, username):
     return render(request, "encyclopedia/welcome.html", {
         "username": username
-    })  
+    })
