@@ -40,12 +40,17 @@ def search(request):
     print(request)
     if request.method == "GET":
         search_query = request.GET['q']
-        print(search_query)
-        # if body is not None:
-        #     return render(request, "encyclopedia/entry.html", {
-        #         "title": search_query,
-        #         "content": body
-        #     })
+        cursor = connection.cursor()
+        sql = 'SELECT username FROM encyclopedia_user WHERE username = "' + search_query + '"'
+        print(sql)
+        cursor.execute(sql)
+        users = cursor.fetchall()
+        print(users)
+        if users is not None:
+            return render(request, "encyclopedia/entry.html", {
+                "title": search_query,
+                "content": users
+            })
         # else :
         #     entries = util.list_entries()
         #     recommendation = []
@@ -104,14 +109,14 @@ def login_view(request):
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
-        sql = 'SELECT * FROM encyclopedia_user WHERE username = "' + username + '" AND password = "' + password + '"'
+        sql = 'SELECT username FROM encyclopedia_user WHERE username = "' + username + '" AND password = "' + password + '"'
         print(sql)
         cursor.execute(sql)
-        user = cursor.fetchone()
+        user = cursor.fetchall()
         print(user)
         #Check if authentication successful
         if user is not None:
-            return render(request, "encyclopedia/index.html", {'username': user[3]})
+            return render(request, "encyclopedia/index.html", {'username': user})
         else:
             return render(request, "encyclopedia/login.html", {"message": "Invalid username and/or password."})
     else:
