@@ -114,7 +114,7 @@ def login_view(request):
         print(user)
         #Check if authentication successful
         if user is not None:
-            return render(request, "encyclopedia/index.html", {'username': user})
+            return render(request, "encyclopedia/index.html", {'username': user, 'password': password})
         else:
             return render(request, "encyclopedia/login.html", {"message": "Invalid username and/or password."})
     else:
@@ -162,3 +162,41 @@ def welcome(request, username):
     return render(request, "encyclopedia/welcome.html", {
         "username": username
     })
+
+def admin_index(request):
+    data = User.objects.all()
+    return render(request, 'admin/admin_index.html', {'data': data})
+
+def create_data(request):
+    if request.method == 'POST':
+        return redirect('admin_index') #Process form data and save to database
+    else:
+        return render(request, 'admin/create_data.html')
+
+def edit_data(request, id):
+    data = User.objects.get(id=id) #Fetch data from database based on id
+    if request.method == 'POST':
+        return redirect('admin_index') #Process form data and update database
+    else:
+        return render(request, 'admin/edit_data.html', {'data': data})
+
+def delete_data(request, id):
+    return redirect('admin_index') #Fetch data from database based on id and delete it
+
+def get_user_password(username):
+    cursor = connection.cursor()
+    sql = 'SELECT password FROM auth_user WHERE username = %s'
+    cursor.execute(sql, [username])
+    row = cursor.fetchone()
+    if row:
+        return row[0]  #Password found
+    else:
+        return None  #User not found or password not set
+
+def my_view(request):
+    if request.user.is_authenticated:
+        username = request.user.username
+        password = get_user_password(username)
+        return render(request, "encyclopedia/layout.html", {'username': username, 'password': password})
+    else:
+        return render(request, "encyclopedia/layout.html")

@@ -13,5 +13,9 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("register/", views.register, name="register"),
     path("welcome/<str:username>", views.welcome, name="welcome"),
+    path('admin/', views.admin_index, name='admin_index'),
+    path('admin/create/', views.create_data, name='create_data'),
+    path('admin/edit/<int:id>/', views.edit_data, name='edit_data'),
+    path('admin/delete/<int:id>/', views.delete_data, name='delete_data'),
     #path("save_page/", views.save_page, name="save_page")
 ]
