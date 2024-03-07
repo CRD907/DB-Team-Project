@@ -5,11 +5,9 @@ Encyclopedia
 {% endblock %}
 
 {% block body %}
-<h1>{{title | safe}}</h1>
-    <p>{{content | safe}}</p>
-
-    <form action="{% url 'edit_page' title %}" method="GET">
-        <input type="submit" value="Edit" class="btn btn-primary">
-    </form>
-
+    {% with content as list %}
+        {% for i in list.split %}
+            {{ i }}<br>
+        {% endfor %}
+      {% endwith %}
 {% endblock %}

@@ -21,7 +21,7 @@ def convert_to_html(page_title):
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+        "entries": ''
     })
 
 def entry(request, title):
@@ -46,20 +46,18 @@ def search(request):
         cursor.execute(sql)
         users = cursor.fetchall()
         print(users)
-        if users is not None:
-            return render(request, "encyclopedia/entry.html", {
-                "title": search_query,
-                "content": users
+        if len(users) > 0:
+            usernames = []
+            for i in users:
+                usernames.append(i[0])
+            print(usernames)
+            return render(request, "encyclopedia/layout.html", {
+                "entries": usernames
             })
-        # else :
-        #     entries = util.list_entries()
-        #     recommendation = []
-        #     for entry in entries:
-        #         if search_query.lower() in entry.lower():
-        #             recommendation.append(entry)
-        #     return render(request, "encyclopedia/search.html", {
-        #         "recommendation": recommendation
-        #     })    
+        else :
+            return render(request, "encyclopedia/layout.html", {
+                "entries": ['user not found']
+            })    
 
 def newpage(request):
     print('hi')

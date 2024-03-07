@@ -13,10 +13,6 @@
             <h1>Welcome</h1>
             <nav>
                 <span>
-                    <form action="{%url 'search' %}" method="GET">
-                        {% csrf_token %}
-                        <input class="search" type="text" name="q" placeholder="Search For users">
-                    </form>
                     <a href="{% url 'index' %}">Home</a>
                     <a href="{% url 'get_random' %}">Random Page</a>
                     {% if username %}
@@ -28,6 +24,17 @@
                     {% else %}
                         <a href="{% url 'login' %}">Log In</a>
                         <a href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </span>
+                <span>
+                    <form action="{%url 'search' %}" method="GET">
+                        {% csrf_token %}
+                        <input class="search" type="text" name="q" placeholder="Search for users">
+                    </form>
+                    {% if entries %}
+                        {% for entry in entries %}
+                            <li><a href="{% url 'entry' title=entry %}">{{entry}}</a></li>
+                        {% endfor %}
                     {% endif %}
                 </span>
             </nav>
